@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
+import com.farahh.patients.entities.Genre;
 import com.farahh.patients.entities.Patient;
 import com.farahh.patients.repos.PatientRepository;
 import com.farahh.patients.service.PatientService;
@@ -25,26 +26,93 @@ class Patients2ApplicationTests {
 	patientRepository.save(pats);
 	}
 	@Test
-	public void testFindProduit()
+	public void testFindPatient()
 	{
 	Patient p = patientRepository.findById(1L).get();
 	System.out.println(p);
 	}
 	@Test
-	public void testUpdateProduit()
+	public void testFindPatientByNom()
+	{
+	List <Patient> pats = patientRepository.findByNomPatient("farah Guelbi");
+	for(Patient p:pats) {
+	System.out.println(p);
+	}
+	}
+	@Test
+	
+	public void testfindByNomTarifconsultation() {
+	    List<Patient> pats = patientRepository.findByNomTarifconsultation("farah Guelbi", 100.0);
+	    for (Patient p : pats) {
+	        System.out.println(p); 
+	    }
+	}
+	@Test
+	public void testfindByGenre()
+	{
+	Genre gen = new Genre();
+	gen.setIdGenre(1L);
+	List<Patient> pats = patientRepository.findByGenre(gen);
+	for (Patient p : pats)
+	{
+	System.out.println(p);
+	}
+	}
+	@Test
+	public void findByGenreIdGenre()
+	{
+	List<Patient> pats = patientRepository.findByGenreIdGenre(1L);
+	for (Patient p : pats)
+	{
+	System.out.println(p);
+	}
+	 }
+
+
+	@Test
+	public void testFindPatientByNomContains()
+	{
+	List <Patient> pats = patientRepository.findByNomPatientContains("f");
+	for(Patient p:pats) {
+	System.out.println(p);
+	}
+	}
+	
+	@Test
+	public void testfindByOrderByNomPatientAsc()
+	{
+	List<Patient> pats =
+	patientRepository.findByOrderByNomPatientAsc();
+	for (Patient p : pats)
+	{
+	System.out.println(p);
+	}
+	}
+	@Test
+	public void testTrierProduitsNomsPrix()
+	{
+	List<Patient> pats = patientRepository.trierPatientsNomsTarif();
+	for (Patient p : pats)
+	{
+	System.out.println(p);
+	}
+	}
+
+	@Test
+	public void testUpdatePatient()
 	{
 	Patient p = patientRepository.findById(1L).get();
 	p.setTarifconsultation(1000.0);
 	patientRepository.save(p);
 	}
 	@Test
-	public void testDeleteProduit()
+	public void testDeletePatient()
 	{
 	patientRepository.deleteById(1L);;
 	}
 
 	@Test
-	public void testListerTousProduits()
+	public void testListerTousPatients()
 	{
 	List<Patient> pats = patientRepository.findAll();
 	for (Patient p : pats)

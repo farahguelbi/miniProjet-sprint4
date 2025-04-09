@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 @Entity
 public class Patient {
 	@Id
@@ -15,8 +17,12 @@ public class Patient {
    private Double Tarifconsultation;
    private Date dateConsultation;
    
+   @ManyToOne
+   @JoinColumn(name = "genre_id_genre")
+   private Genre genre;
    
    
+
 public Patient() {
 	super();
 	// TODO Auto-generated constructor stub
@@ -67,6 +73,15 @@ public String toString() {
 			+ Tarifconsultation + ", dateConsultation=" + dateConsultation + "]";
 }
    
-   
+public Genre getGenre() {
+	return genre;
+}
+
+
+public void setGenre(Genre genre) {
+	this.genre = genre;
+}
+
+
    
 }
