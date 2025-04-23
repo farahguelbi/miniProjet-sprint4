@@ -22,4 +22,5 @@ public interface PatientService {
 	List<Patient> findByGenreIdGenre(Long id);
 	List<Patient> findByOrderByNomPatientAsc();
 	List<Patient> trierPatientsNomsPrix();
+	List<Genre> getAllGenres();
 }

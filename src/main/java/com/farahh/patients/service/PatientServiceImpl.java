@@ -9,13 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.farahh.patients.entities.Genre;
 import com.farahh.patients.entities.Patient;
+import com.farahh.patients.repos.GenreRepository;
 import com.farahh.patients.repos.PatientRepository;
 
 @Service
 public class PatientServiceImpl implements PatientService {
    @Autowired
 	PatientRepository patientRepository;
-   
+   @Autowired
+	GenreRepository genreRepository;
 	@Override
 	public Patient savePatient(Patient p) {
 		return patientRepository.save(p);
@@ -93,6 +95,11 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public List<Patient> findByGenre(Genre genre) {
 		return patientRepository.findByGenre(genre);
+	}
+	
+	@Override
+	public List<Genre> getAllGenres() {
+		return genreRepository.findAll();
 	}
 
 }

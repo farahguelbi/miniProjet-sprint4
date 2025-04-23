@@ -2,19 +2,38 @@ package com.farahh.patients.entities;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+
 @Entity
 public class Patient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long idPatient;
+	@NotNull
+	@Size (min = 4,max = 15)
    private String nomPatient;
-   private Double Tarifconsultation;
+	@Min(value = 10)
+	 @Max(value = 10000)
+	
+   private Double tarifConsultation;
+   @Temporal(TemporalType.DATE)
+   @DateTimeFormat(pattern = "yyyy-MM-dd")
+   @PastOrPresent
+
    private Date dateConsultation;
    
    @ManyToOne
@@ -32,7 +51,7 @@ public Patient() {
 public Patient(String nomPatient, Double tarifconsultation, Date dateConsultation) {
 	super();
 	this.nomPatient = nomPatient;
-	Tarifconsultation = tarifconsultation;
+	tarifConsultation = tarifconsultation;
 	this.dateConsultation = dateConsultation;
 }
 
@@ -50,13 +69,13 @@ public void setNomPatient(String nomPatient) {
 	this.nomPatient = nomPatient;
 }
 
-public Double getTarifconsultation() {
-	return Tarifconsultation;
+public Double getTarifConsultation() {
+	return tarifConsultation;
 }
 
 
-public void setTarifconsultation(Double tarifconsultation) {
-	Tarifconsultation = tarifconsultation;
+public void setTarifConsultation(Double tarifconsultation) {
+	this.tarifConsultation = tarifconsultation;
 }
 
 
@@ -70,7 +89,7 @@ public void setDateConsultation(Date dateConsultation) {
 @Override
 public String toString() {
 	return "Patient [idPatient=" + idPatient + ", nomPatient=" + nomPatient + ", Tarif_consultation="
-			+ Tarifconsultation + ", dateConsultation=" + dateConsultation + "]";
+			+ tarifConsultation + ", dateConsultation=" + dateConsultation + "]";
 }
    
 public Genre getGenre() {

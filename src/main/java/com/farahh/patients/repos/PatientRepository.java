@@ -17,13 +17,13 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
   List<Patient> findByNomPatientContains(String nom); 
   /*@Query("select p from Patient p where p.nomPatient like %?1% and p.Tarifconsultation > ?2")
   List<Patient> findByNomTarifconsultation(String nom, Double tarif);*/
-  @Query("select p from Patient p where p.nomPatient like %:nom and p.Tarifconsultation > :tarif")
+  @Query("select p from Patient p where p.nomPatient like %:nom and p.tarifConsultation > :tarif")
   List<Patient> findByNomTarifconsultation (@Param("nom") String nom,@Param("tarif") Double tarif);
   @Query("select p from Patient p where p.genre = ?1")
   List<Patient> findByGenre (Genre genre);
   List<Patient> findByGenreIdGenre(Long id);
   List<Patient> findByOrderByNomPatientAsc();
-  @Query("select p from Patient p order by p.nomPatient ASC, p.Tarifconsultation DESC")
+  @Query("select p from Patient p order by p.nomPatient ASC, p.tarifConsultation DESC")
   List<Patient> trierPatientsNomsTarif ();
 
 }

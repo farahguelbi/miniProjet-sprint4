@@ -89,7 +89,7 @@ class Patients2ApplicationTests {
 	}
 	}
 	@Test
-	public void testTrierProduitsNomsPrix()
+	public void testTrierPatientsNomsPrix()
 	{
 	List<Patient> pats = patientRepository.trierPatientsNomsTarif();
 	for (Patient p : pats)
@@ -102,7 +102,7 @@ class Patients2ApplicationTests {
 	public void testUpdatePatient()
 	{
 	Patient p = patientRepository.findById(1L).get();
-	p.setTarifconsultation(1000.0);
+	p.setTarifConsultation(1000.0);
 	patientRepository.save(p);
 	}
 	@Test

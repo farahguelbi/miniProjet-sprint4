@@ -9,12 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.farahh.patients.entities.Patient;
 import com.farahh.patients.service.PatientService;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class PatientController {
@@ -35,11 +38,14 @@ public class PatientController {
 	}
 
 	@RequestMapping("/showCreate")
-	public String showCreate() {
-		return "createPatient";
+	public String showCreate(ModelMap modelMap)
+	{
+	modelMap.addAttribute("patient", new Patient());
+	modelMap.addAttribute("mode", "new");
+	return "createPatient";
 	}
 
-	@RequestMapping("/savePatient")
+	/*@RequestMapping("/savePatient")
 	public String savePatient(@ModelAttribute("patient") Patient patient, @RequestParam("date") String date,
 			ModelMap modelMap) throws ParseException {
 		// conversion de la date
@@ -51,7 +57,17 @@ public class PatientController {
 		String msg = "patient enregistré avec Id " + savePatient.getIdPatient();
 		modelMap.addAttribute("msg", msg);
 		return "createPatient";
-	}
+	}*/
+	@RequestMapping("/savePatient")
+	public String savePatient(@Valid Patient patient,
+			 BindingResult bindingResult)
+			{
+			if (bindingResult.hasErrors()) return "createPatient";
+
+			patientService.savePatient(patient);
+			return "createPatient";
+			}
+
 
 	@RequestMapping("/supprimerPatient")
 	public String supprimerPatient(@RequestParam("id") Long id, ModelMap modelMap,
@@ -72,7 +88,9 @@ public class PatientController {
 	public String editerPatient(@RequestParam("id") Long id, ModelMap modelMap) {
 		Patient p = patientService.getPatient(id);
 		modelMap.addAttribute("patient", p);
-		return "editerPatient";
+		modelMap.addAttribute("mode", "edit");
+
+		return "createPatient";
 	}
 
 	@RequestMapping("/updatePatient")
