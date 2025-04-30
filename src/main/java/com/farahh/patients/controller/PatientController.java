@@ -10,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.farahh.patients.entities.Genre;
 import com.farahh.patients.entities.Patient;
 import com.farahh.patients.service.PatientService;
 
@@ -23,6 +25,19 @@ import jakarta.validation.Valid;
 public class PatientController {
 	@Autowired
 	PatientService patientService;
+	
+	@GetMapping("/accessDenied")
+	public String error()
+	{
+	return "accessDenied";
+	}
+
+	
+	
+	@GetMapping(value = "/")
+	public String welcome() {
+	 return "index";
+	}
 
 	@RequestMapping("/ListePatients")
 	public String listePatients(ModelMap modelMap,
@@ -40,9 +55,13 @@ public class PatientController {
 	@RequestMapping("/showCreate")
 	public String showCreate(ModelMap modelMap)
 	{
+		List<Genre> gens = patientService.getAllGenres();
+
 	modelMap.addAttribute("patient", new Patient());
 	modelMap.addAttribute("mode", "new");
-	return "createPatient";
+	modelMap.addAttribute("genres", gens);
+
+	return "formPatient";
 	}
 
 	/*@RequestMapping("/savePatient")
@@ -60,12 +79,25 @@ public class PatientController {
 	}*/
 	@RequestMapping("/savePatient")
 	public String savePatient(@Valid Patient patient,
-			 BindingResult bindingResult)
-			{
-			if (bindingResult.hasErrors()) return "createPatient";
+			 BindingResult bindingResult,
+			 @RequestParam (name="page",defaultValue = "0") int page,
+			 @RequestParam (name="size",defaultValue = "2") int size) {
+	int currentPage;
+	boolean isNew = false;
+			
+			if (bindingResult.hasErrors()) return "formPatient";
+			if (patient.getIdPatient()==null) //ajout
+				isNew=true;
 
 			patientService.savePatient(patient);
-			return "createPatient";
+			if (isNew) //ajout
+			{
+			Page<Patient> pats = patientService.getAllPatientsParPage(page, size);
+			currentPage = pats.getTotalPages()-1;
+			}
+			else //modif
+			currentPage=page;
+			return ("redirect:/ListePatients?page="+currentPage+"&size="+size);
 			}
 
 
@@ -85,12 +117,23 @@ public class PatientController {
 	}
 
 	@RequestMapping("/modifierPatient")
-	public String editerPatient(@RequestParam("id") Long id, ModelMap modelMap) {
+	public String editerPatient(@RequestParam("id") Long id, ModelMap modelMap,
+			@RequestParam (name="page",defaultValue = "0") int page,
+			 @RequestParam (name="size",defaultValue = "2") int size)
+ {
 		Patient p = patientService.getPatient(id);
+	List<Genre> gens = patientService.getAllGenres();
+
 		modelMap.addAttribute("patient", p);
 		modelMap.addAttribute("mode", "edit");
+		modelMap.addAttribute("genres", gens);
+		modelMap.addAttribute("page", page);
+		modelMap.addAttribute("size", size);
 
-		return "createPatient";
+
+
+
+		return "formPatient";
 	}
 
 	@RequestMapping("/updatePatient")
@@ -106,5 +149,6 @@ public class PatientController {
 		modelMap.addAttribute("patients", pats);
 		return "listePatients";
 	}
+	
 	
 }

@@ -14,23 +14,32 @@
 			 <div class="card-header" th:if="${mode=='new'}"> Ajout des Patients </div>
 			<div class="card-header" th:if="${mode=='edit'}">Modification des Patients </div>
 			<div class="card-body">
-				<form th:action="@{savePatient}" method="post">
+				<form th:action="@{savePatient}" th:object="${patient}" method="post">
+					<input hidden name="page" class="form-control" th:value="${page}" />
+					<input hidden name="size" class="form-control" th:value="${size}" />
+
 					<div class="form-group">
+					<label class="control-label" hidden>ID Patient :</label>
+					<input type="hidden" name="idPatient" class="form-control"
+					th:value="${patient.idPatient}" />
+					 </div>
+					<div class="form-group">
+						
 						<label class="control-label">Nom Patient :</label>
-						<input type="text" name="nomPatient" class="form-control" />
-						<span th:errors= ${patient.nomPatient} class="text-danger"> </span>
+						<input type="text" th:field="*{nomPatient}" class="form-control"/>
+						      <span th:errors="*{nomPatient}" class="text-danger"></span>
 
 					</div>
 					<div class="form-group">
 						<label class="control-label">Prix Consultation :</label>
-						<input type="text" name="tarifConsultation" class="form-control" />
-						<span th:errors=${patient.tarifConsultation} class="text-danger"> </span>
+						<input type="text" th:field="*{tarifConsultation}" class="form-control"/>
+						      <span th:errors="*{tarifConsultation}" class="text-danger"></span>
 
 					</div>
 					<div class="form-group">
 						<label class="control-label">date Consultation :</label>
-						<input type="date" name="dateConsultation" class="form-control" />
-						<span th:errors=${patient.dateConsultation} class="text-danger"> </span>
+						<input type="date" th:field="*{dateConsultation}" class="form-control"/>
+						       <span th:errors="*{dateConsultation}" class="text-danger"></span>
 
 					</div>
 					
@@ -43,7 +52,7 @@
 					th:if="${!#strings.isEmpty(patient.genre)}" >
 					<option th:each="c:${genres}" th:if="${mode=='edit'}"
 					 th:value="${c.idGenre}" th:text="${c.nomGenre}"
-					 th:selected="${ c.idCat==patient.genre.idGenre}">
+					 th:selected="${ c.idGenre==patient.genre.idGenre}">
 					</option>
 					</select>
 					<select name="genre" class="form-control"

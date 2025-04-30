@@ -14,11 +14,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @Data	
 @NoArgsConstructor
-
 @AllArgsConstructor
 @Entity
-
-
 public class Genre {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +31,7 @@ public class Genre {
 	//public Genre() {
 		//super();
 	//}
-	public String getNomGenre() {
+	/*public String getNomGenre() {
 		return nomGenre;
 	}
 
@@ -68,7 +65,7 @@ public class Genre {
 	public void setPatients(List<Patient> patients) {
 		this.patients = patients;
 	}
-
+*/
 	
 
 }
